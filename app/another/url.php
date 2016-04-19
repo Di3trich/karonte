@@ -10,11 +10,11 @@ $router->route('/msg/(\w+)', function($request, $text){
     echo "Mensaje: $text";
 });
 
-$router->app('/app(/.*)', new \Katty\App(__DIR__));
+$router->app('/app(/.*)', new \Karonte\App(__DIR__));
 
 $router->route('/eliminar/(\d+)', function($request, $id){
     //TODO: eliminar registro $id utilizando la tabla
-    $config = new \Katty\Init(__DIR__);
+    $config = new \Karonte\Init(__DIR__);
     $tabla = $config->get_config('tabla');
 
     View::load(__DIR__.'/vista/vista1.phtml', array(

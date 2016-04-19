@@ -1,6 +1,6 @@
 <?php
 
-namespace Katty;
+namespace Karonte;
 
 include __DIR__ . DIRECTORY_SEPARATOR . 'app.php';
 include __DIR__ . DIRECTORY_SEPARATOR . 'request.php';

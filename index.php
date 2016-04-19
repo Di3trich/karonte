@@ -1,5 +1,5 @@
 <?php
 
-include "sys/katty.php";
+include "sys/karonte.php";
 
-(new \Katty\MainApp('app'))->run();
+(new \Karonte\MainApp('app'))->run();

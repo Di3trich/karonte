@@ -1,6 +1,6 @@
 <?php
 
-namespace Katty;
+namespace Karonte;
 
 class App {
     private $app_path = null;

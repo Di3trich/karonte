@@ -18,7 +18,7 @@ class Router {
         $this->routes[$this->get_pattern($pattern)] = $callback;
     }
 
-    public function app($pattern, \Katty\App $app) {
+    public function app($pattern, \Karonte\App $app) {
         $this->apps[$this->get_pattern($pattern)] = $app;
     }
 
@@ -31,7 +31,7 @@ class Router {
         //echo "URL[$url] -> ";
         foreach ($this->routes as $pattern => $callback) {
             if (preg_match($pattern, $url, $params)) {
-                $params[0] = new \Katty\Request();
+                $params[0] = new \Karonte\Request();
                 //echo "[call-function($pattern)]"."\n";
                 return call_user_func_array($callback, array_values($params));
             }
@@ -39,14 +39,14 @@ class Router {
         foreach ($this->apps as $pattern => $app) {
             if (preg_match($pattern, $url, $params)) {
                 //echo "[call-app($pattern)]"."\n";
-                return $app->run(new \Katty\Request(), $params[1]);
+                return $app->run(new \Karonte\Request(), $params[1]);
             }
         }
         foreach ($this->routes as $pattern => $controller) {
             if (preg_match($pattern, $url, $params)) {
                 array_shift($params);
                 $method = $params[0];
-                $params[0] = new \Katty\Request();
+                $params[0] = new \Karonte\Request();
                 return call_user_func_array(array($controller, $method), $params);
             }
         }

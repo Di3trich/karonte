@@ -1,5 +1,5 @@
 <?php
 
-$init = new \Katty\Init();
+$init = new \Karonte\Init();
 
 return $init;

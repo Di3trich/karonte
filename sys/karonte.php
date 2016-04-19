@@ -6,8 +6,8 @@ include __DIR__ . DIRECTORY_SEPARATOR . 'app.php';
 include __DIR__ . DIRECTORY_SEPARATOR . 'request.php';
 include __DIR__ . DIRECTORY_SEPARATOR . 'router.php';
 include __DIR__ . DIRECTORY_SEPARATOR . 'init.php';
-include __DIR__ . DIRECTORY_SEPARATOR . 'paris.php';
 include __DIR__ . DIRECTORY_SEPARATOR . 'idiorm.php';
+include __DIR__ . DIRECTORY_SEPARATOR . 'paris.php';
 
 class MainApp {
     private $app_path;

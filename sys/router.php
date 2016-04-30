@@ -1,9 +1,10 @@
 <?php
 
+namespace Karonte;
+
 class Router {
 
     private $routes = array();
-    private $apps = array();
     private $prefix = '';
 
     public function __construct($prefix = '') {
@@ -15,39 +16,30 @@ class Router {
     }
 
     public function route($pattern, $callback) {
-        $this->routes[$this->get_pattern($pattern)] = $callback;
+        $this->routes[$this->get_pattern($pattern)] = array(
+            'type' => 'callable',
+            'call' => $callback
+        );
     }
 
-    public function app($pattern, \Karonte\App $app) {
-        $this->apps[$this->get_pattern($pattern)] = $app;
-    }
-
-    public function controller($pattern, $controller) {
-        $this->controllers[$this->get_pattern($pattern)] = $controller;
+    public function route_app($pattern, $callback, $config = array()) {
+        $this->routes[$this->get_pattern($pattern . '(/.*)')] = array(
+            'type' => 'application',
+            'call' => $callback,
+            'config' => $config
+        );
     }
 
     public function execute($url = null) {
         $url = preg_replace('/\?.*/', '', $url ? $url : $_SERVER['REQUEST_URI']);
-        //echo "URL[$url] -> ";
         foreach ($this->routes as $pattern => $callback) {
             if (preg_match($pattern, $url, $params)) {
-                $params[0] = new \Karonte\Request();
-                //echo "[call-function($pattern)]"."\n";
-                return call_user_func_array($callback, array_values($params));
-            }
-        }
-        foreach ($this->apps as $pattern => $app) {
-            if (preg_match($pattern, $url, $params)) {
-                //echo "[call-app($pattern)]"."\n";
-                return $app->run(new \Karonte\Request(), $params[1]);
-            }
-        }
-        foreach ($this->routes as $pattern => $controller) {
-            if (preg_match($pattern, $url, $params)) {
-                array_shift($params);
-                $method = $params[0];
-                $params[0] = new \Karonte\Request();
-                return call_user_func_array(array($controller, $method), $params);
+                if ($callback['type'] == 'callable') {
+                    $params[0] = new Request();
+                    return call_user_func_array($callback['call'], array_values($params));
+                } else {
+                    
+                }
             }
         }
         echo "404"; //TODO: implementar vista de error

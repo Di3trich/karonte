@@ -22,10 +22,10 @@ class Router {
         );
     }
 
-    public function route_app($pattern, $callback, $config = array()) {
+    public function route_app($pattern, $app_path, $config = array()) {
         $this->routes[$this->get_pattern($pattern . '(/.*)')] = array(
             'type' => 'application',
-            'call' => $callback,
+            'path' => $app_path,
             'config' => $config
         );
     }
@@ -38,7 +38,7 @@ class Router {
                     $params[0] = new Request();
                     return call_user_func_array($callback['call'], array_values($params));
                 } else {
-                    
+                    (new App($callback['path']))->run($params[1], $callback['config']);
                 }
             }
         }

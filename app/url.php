@@ -17,11 +17,10 @@ class CL {
     }
 
     public static function another() {
-        echo "another";
+        $init = new \Karonte\Init(__DIR__);
+        echo "another " . $init->get('prueba');
     }
 }
-
-;
 
 $router->route('/otro', 'funcion');
 

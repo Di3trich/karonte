@@ -18,6 +18,6 @@ class MainApp {
     }
 
     public function run() {
-        (new App($this->app_path))->run(new Request());
+        (new App($this->app_path))->run();
     }
 }

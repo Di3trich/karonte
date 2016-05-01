@@ -20,8 +20,9 @@ class App {
         }
     }
 
-    public function run($request, $url = null) {
+    public function run($url = null, $config = array()) {
         $init = require($this->app_init_path);
+        $init->set_config($config);
         $router = require($this->app_url_path);
         if ($url === null) {
             return $router->execute();

@@ -23,4 +23,8 @@ class Init {
         }
         return false;
     }
+
+    public function set_config($config){
+
+    }
 }

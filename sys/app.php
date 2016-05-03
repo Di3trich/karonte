@@ -23,7 +23,25 @@ class App {
     public function run($url = null, $config = array()) {
         $init = require($this->app_init_path);
         $init->set_config($config);
+        if ($init->get('database')) {
+            $database = $init->get('database');
+            ORM::configure($database['connection']);
+            if (isset($database['username'])) {
+                ORM::configure('username', $database['username']);
+            }
+            if (isset($database['password'])) {
+                ORM::configure('password', $database['password']);
+            }
+        }
+
+        if ($init->get('required')) {
+            foreach ($init->get('required') as $require) {
+                include_once($require);
+            }
+        }
+
         $router = require($this->app_url_path);
+
         if ($url === null) {
             return $router->execute();
         } else {

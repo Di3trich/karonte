@@ -37,11 +37,13 @@ class Router {
                 if ($callback['type'] == 'callable') {
                     $params[0] = new Request();
                     $response = call_user_func_array($callback['call'], array_values($params));
-                    $response->render();
+                    if($response instanceof Response)
+                        $response->render();
                     return;
                 } else {
                     $response = (new App($callback['path']))->run($params[1], $callback['config']);
-                    $response->render();
+                    if($response instanceof Response)
+                        $response->render();
                     return;
                 }
             }

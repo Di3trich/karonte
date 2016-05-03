@@ -7,21 +7,6 @@ $router->route('/', function () {
     echo "hola mundo";
 });
 
-function funcion() {
-    echo "hola";
-}
-
-class CL {
-    public function test() {
-        echo "test";
-    }
-
-    public static function another() {
-        $init = new \Karonte\Init(__DIR__);
-        echo "another " . $init->get('prueba');
-    }
-}
-
 $router->route('/otro', 'funcion');
 
 $router->route('/another', 'CL::another');
@@ -29,7 +14,12 @@ $router->route('/another', 'CL::another');
 $router->route('/test', array(new CL, 'test'));
 
 $router->route('/vista', function ($response) {
-    return \Karonte\Response::VIEW(new \Karonte\View(__DIR__ . '/vista.phtml'));
+    $vista = \Karonte\View::load(__DIR__.'/vista.phtml')->bind('mensaje', 'hola mundo');
+    return \Karonte\Response::VIEW($vista);
+});
+
+$router->route('/file', function(){
+    return \Karonte\Response::FILE('/home/jonathan/Descargas/mozo.jpg', 'mozo.jpg');
 });
 
 //$router->route_app('/app', __DIR__ . '/app');

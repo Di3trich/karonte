@@ -36,8 +36,12 @@ class Request {
         }
     }
 
-    public function query_param($key) {
+    public function get($key) {
         return self::$query_map[$key];
+    }
+
+    public function param($key) {
+        return self::$data[$key];
     }
 
     public function query_string() {

@@ -73,8 +73,4 @@ class Response {
             header($key . ': ' . $value);
         }
     }
-
-    public function write($content) {
-        $this->content .= $content;
-    }
 }

@@ -25,6 +25,6 @@ class Init {
     }
 
     public function set_config($config) {
-
+        $this->config = array_merge($this->config, $config);
     }
 }

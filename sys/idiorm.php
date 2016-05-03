@@ -1,5 +1,7 @@
 <?php
 
+namespace Karonte;
+
     /**
      *
      * Idiorm
@@ -38,7 +40,7 @@
      *
      */
 
-    class ORM implements ArrayAccess {
+    class ORM implements \ArrayAccess {
 
         // ----------------------- //
         // --- CLASS CONSTANTS --- //
@@ -63,7 +65,7 @@
             'connection_string' => 'sqlite::memory:',
             'id_column' => 'id',
             'id_column_overrides' => array(),
-            'error_mode' => PDO::ERRMODE_EXCEPTION,
+            'error_mode' => \PDO::ERRMODE_EXCEPTION,
             'username' => null,
             'password' => null,
             'driver_options' => null,
@@ -247,14 +249,14 @@
                 !is_object(self::$_db[$connection_name])) {
                 self::_setup_db_config($connection_name);
 
-                $db = new PDO(
+                $db = new \PDO(
                     self::$_config[$connection_name]['connection_string'],
                     self::$_config[$connection_name]['username'],
                     self::$_config[$connection_name]['password'],
                     self::$_config[$connection_name]['driver_options']
                 );
 
-                $db->setAttribute(PDO::ATTR_ERRMODE, self::$_config[$connection_name]['error_mode']);
+                $db->setAttribute(\PDO::ATTR_ERRMODE, self::$_config[$connection_name]['error_mode']);
                 self::set_db($db, $connection_name);
             }
         }
@@ -327,7 +329,7 @@
          * @return string
          */
         protected static function _detect_identifier_quote_character($connection_name) {
-            switch(self::get_db($connection_name)->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+            switch(self::get_db($connection_name)->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
                 case 'pgsql':
                 case 'sqlsrv':
                 case 'dblib':
@@ -350,7 +352,7 @@
          * @return string Limit clause style keyword/constant
          */
         protected static function _detect_limit_clause_style($connection_name) {
-            switch(self::get_db($connection_name)->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+            switch(self::get_db($connection_name)->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
                 case 'sqlsrv':
                 case 'dblib':
                 case 'mssql':
@@ -414,13 +416,13 @@
 
             foreach ($parameters as $key => &$param) {
                 if (is_null($param)) {
-                    $type = PDO::PARAM_NULL;
+                    $type = \PDO::PARAM_NULL;
                 } else if (is_bool($param)) {
-                    $type = PDO::PARAM_BOOL;
+                    $type = \PDO::PARAM_BOOL;
                 } else if (is_int($param)) {
-                    $type = PDO::PARAM_INT;
+                    $type = \PDO::PARAM_INT;
                 } else {
-                    $type = PDO::PARAM_STR;
+                    $type = \PDO::PARAM_STR;
                 }
 
                 $statement->bindParam(is_int($key) ? ++$key : $key, $param, $type);
@@ -1675,7 +1677,7 @@
             $fragment = '';
             if (!is_null($this->_limit) &&
                 self::$_config[$this->_connection_name]['limit_clause_style'] == ORM::LIMIT_STYLE_LIMIT) {
-                if (self::get_db($this->_connection_name)->getAttribute(PDO::ATTR_DRIVER_NAME) == 'firebird') {
+                if (self::get_db($this->_connection_name)->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'firebird') {
                     $fragment = 'ROWS';
                 } else {
                     $fragment = 'LIMIT';
@@ -1691,7 +1693,7 @@
         protected function _build_offset() {
             if (!is_null($this->_offset)) {
                 $clause = 'OFFSET';
-                if (self::get_db($this->_connection_name)->getAttribute(PDO::ATTR_DRIVER_NAME) == 'firebird') {
+                if (self::get_db($this->_connection_name)->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'firebird') {
                     $clause = 'TO';
                 }
                 return "$clause " . $this->_offset;
@@ -1829,7 +1831,7 @@
             $statement = self::get_last_statement();
 
             $rows = array();
-            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
                 $rows[] = $row;
             }
 
@@ -2011,10 +2013,10 @@
                 $this->_is_new = false;
                 if ($this->count_null_id_columns() != 0) {
                     $db = self::get_db($this->_connection_name);
-                    if($db->getAttribute(PDO::ATTR_DRIVER_NAME) == 'pgsql') {
+                    if($db->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'pgsql') {
                         // it may return several columns if a compound primary
                         // key is used
-                        $row = self::get_last_statement()->fetch(PDO::FETCH_ASSOC);
+                        $row = self::get_last_statement()->fetch(\PDO::FETCH_ASSOC);
                         foreach($row as $key => $value) {
                             $this->_data[$key] = $value;
                         }
@@ -2085,7 +2087,7 @@
             $placeholders = $this->_create_placeholders($this->_dirty_fields);
             $query[] = "({$placeholders})";
 
-            if (self::get_db($this->_connection_name)->getAttribute(PDO::ATTR_DRIVER_NAME) == 'pgsql') {
+            if (self::get_db($this->_connection_name)->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'pgsql') {
                 $query[] = 'RETURNING ' . $this->_quote_identifier($this->_get_id_column_name());
             }
 
@@ -2182,7 +2184,7 @@
             if (method_exists($this, $method)) {
                 return call_user_func_array(array($this, $method), $arguments);
             } else {
-                throw new IdiormMethodMissingException("Method $name() does not exist in class " . get_class($this));
+                throw new \IdiormMethodMissingException("Method $name() does not exist in class " . get_class($this));
             }
         }
 
@@ -2280,7 +2282,7 @@
                 \z                          # Anchor to end of string.
                 /sx';
             if (!preg_match($re_valid, $this->subject)) {
-                throw new IdiormStringException("Subject string is not valid in the replace_outside_quotes context.");
+                throw new \IdiormStringException("Subject string is not valid in the replace_outside_quotes context.");
             }
             $re_parse = '/
                 # Match one chunk of a valid string having embedded quoted substrings.
@@ -2314,7 +2316,7 @@
      * A result set class for working with collections of model instances
      * @author Simon Holywell <treffynnon@php.net>
      */
-    class IdiormResultSet implements Countable, IteratorAggregate, ArrayAccess, Serializable {
+    class IdiormResultSet implements \Countable, \IteratorAggregate, \ArrayAccess, \Serializable {
         /**
          * The current result set as an array
          * @var array
@@ -2436,7 +2438,7 @@
                 if (method_exists($model, $method)) {
                     call_user_func_array(array($model, $method), $params);
                 } else {
-                    throw new IdiormMethodMissingException("Method $method() does not exist in class " . get_class($this));
+                    throw new \IdiormMethodMissingException("Method $method() does not exist in class " . get_class($this));
                 }
             }
             return $this;
@@ -2446,6 +2448,6 @@
     /**
      * A placeholder for exceptions eminating from the IdiormString class
      */
-    class IdiormStringException extends Exception {}
+    class IdiormStringException extends \Exception {}
 
-    class IdiormMethodMissingException extends Exception {}
+    class IdiormMethodMissingException extends \Exception {}

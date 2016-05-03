@@ -11,7 +11,7 @@ class View {
         $this->bind($context);
     }
 
-    public static function &load($path, $context) {
+    public static function load($path, $context = array()) {
         return new View($path, $context);
     }
 

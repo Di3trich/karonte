@@ -36,9 +36,13 @@ class Router {
             if (preg_match($pattern, $url, $params)) {
                 if ($callback['type'] == 'callable') {
                     $params[0] = new Request();
-                    return call_user_func_array($callback['call'], array_values($params));
+                    $response = call_user_func_array($callback['call'], array_values($params));
+                    $response->render();
+                    return;
                 } else {
-                    (new App($callback['path']))->run($params[1], $callback['config']);
+                    $response = (new App($callback['path']))->run($params[1], $callback['config']);
+                    $response->render();
+                    return;
                 }
             }
         }

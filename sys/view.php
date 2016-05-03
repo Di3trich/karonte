@@ -20,7 +20,7 @@ class View {
         include $this->view_path;
     }
 
-    public function &bind($key, $value) {
+    public function &bind($key, $value = null) {
         if (is_array($key)) {
             $this->context = array_merge($this->context, $key);
         } else {

@@ -28,6 +28,10 @@ $router->route('/another', 'CL::another');
 
 $router->route('/test', array(new CL, 'test'));
 
-$router->route_app('/app', __DIR__ . '/app');
+$router->route('/vista', function ($response) {
+    return \Karonte\Response::VIEW(new \Karonte\View(__DIR__ . '/vista.phtml'));
+});
+
+//$router->route_app('/app', __DIR__ . '/app');
 
 return $router;

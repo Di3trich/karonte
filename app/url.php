@@ -11,6 +11,10 @@ $router->route('/otro', 'funcion');
 
 $router->route('/another', 'CL::another');
 
+$router->route('/sesion', array(new CL, 'sesion'));
+
+$router->route('/destroy', array(new CL, 'clear'));
+
 $router->route('/test', array(new CL, 'test'));
 
 $router->route('/vista', function ($response) {

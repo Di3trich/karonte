@@ -9,8 +9,10 @@ class Request {
     private static $query_map = null;
     public static $query_string = null;
     private static $data = null;
+    public $session = null;
 
     public function __construct() {
+        $this->session = new Session();
         if (self::$method === null) {
             self::$method = strtoupper(strtolower($_SERVER['REQUEST_METHOD']));
         }
@@ -46,9 +48,5 @@ class Request {
 
     public function query_string() {
         return self::$query_string;
-    }
-
-    public function data($key) {
-        return self::$data[$key];
     }
 }

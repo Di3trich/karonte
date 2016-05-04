@@ -1,33 +1,10 @@
 <?php
 
 $init = new \Karonte\Init(__DIR__);
-$router = new \Karonte\Router('/karonte');
+$router = new \Karonte\Router($init->get('prefix'));
 
-$router->route('/', function () {
-    echo "hola mundo";
-});
-
-$router->route('/otro', 'funcion');
-
-$router->route('/another', 'CL::another');
-
-$router->route('/sesion', array(new CL, 'sesion'));
-
-$router->route('/destroy', array(new CL, 'clear'));
-
-$router->route('/api', array(new CL, 'meth'));
-
-$router->route('/test', array(new CL, 'test'));
-
-$router->route('/vista', function ($response) {
-    $vista = \Karonte\View::load(__DIR__.'/vista.phtml')->bind('mensaje', 'hola mundo');
-    return \Karonte\Response::VIEW($vista);
-});
-
-$router->route('/file', function(){
-    return \Karonte\Response::FILE('/home/jonathan/Descargas/mozo.jpg', 'mozo.jpg');
-});
-
-//$router->route_app('/app', __DIR__ . '/app');
+$router->route_app('/api/usuarios', __DIR__ . '/crud', array('table' => 'usuarios'));
+$router->route_app('/api/cliente', __DIR__ . '/crud', array('table' => 'cliente'));
+$router->route_app('/api/comprobante', __DIR__ . '/crud', array('table' => 'comprobante'));
 
 return $router;

@@ -1904,11 +1904,11 @@ namespace Karonte;
                 if (is_array($id)) {
                     foreach ($id as $id_part) {
                         if ($id_part === null) {
-                            throw new Exception('Primary key ID contains null value(s)');
+                            throw new \Exception('Primary key ID contains null value(s)');
                         }
                     }
                 } else if ($id === null) {
-                    throw new Exception('Primary key ID missing from row or is null');
+                    throw new \Exception('Primary key ID missing from row or is null');
                 }
             }
 

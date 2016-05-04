@@ -15,6 +15,8 @@ $router->route('/sesion', array(new CL, 'sesion'));
 
 $router->route('/destroy', array(new CL, 'clear'));
 
+$router->route('/api', array(new CL, 'meth'));
+
 $router->route('/test', array(new CL, 'test'));
 
 $router->route('/vista', function ($response) {

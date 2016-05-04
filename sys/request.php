@@ -26,10 +26,10 @@ class Request {
             self::$query_map = $_GET;
         }
         if (self::$data === null) {
-            if (self::$method == 'GET') {
+            if (self::$method === 'GET') {
                 self::$data = $_GET;
                 unset($_GET);
-            } elseif (self::$method == 'POST') {
+            } elseif (self::$method === 'POST') {
                 self::$data = $_POST;
                 unset($_POST);
             } else {
@@ -39,14 +39,28 @@ class Request {
     }
 
     public function get($key) {
-        return self::$query_map[$key];
+        if (array_key_exists($key, self::$query_map)) {
+            return self::$query_map[$key];
+        }
+        return false;
     }
 
     public function param($key) {
-        return self::$data[$key];
+        if (array_key_exists($key, self::$data)) {
+            return self::$data[$key];
+        }
+        return false;
+    }
+
+    public function param_all() {
+        return self::$data;
     }
 
     public function query_string() {
         return self::$query_string;
+    }
+
+    public function get_method() {
+        return self::$method;
     }
 }

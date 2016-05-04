@@ -24,17 +24,24 @@ class CL {
 
     public function sesion($request) {
         if (!$request->session->exist('count')) {
-            echo "set ";
             $request->session->set('count', 0);
         } else {
-            echo "get ";
             $request->session->set('count', $request->session->get('count') * 1 + 1);
         }
-        return \Karonte\Response::html($request->session->get('count'));
+        return \Karonte\Response::json(array('data' => $request->session->get('count')));
     }
 
     public function clear($request) {
         $request->session->delete('count');
+    }
+
+    public function meth($request) {
+        $data = $request->param_all();
+        return \Karonte\Response::json(array(
+            'method' => $request->get_method(),
+            'data' => $data,
+            'query' => $request->get('query')
+        ));
     }
 }
 
